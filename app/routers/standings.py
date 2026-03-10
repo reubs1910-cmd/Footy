@@ -16,10 +16,15 @@ async def get_standings(competition_code: str):
 
     #since multiple tables (home, away, etc), we only want the Total one
     standings = data.get("standings", [])
-    table = None;
+    table = [];
     for standing in standings:
         if standing.get("type") == "TOTAL":
             table = standing.get("table", [])
+            break
+
+    #if table is empty and standings exists, use the first table
+    if not table and standings:
+        table = standings[0].get("table", [])
 
     cleaned_table = []
     for row in table:
